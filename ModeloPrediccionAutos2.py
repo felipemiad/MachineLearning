@@ -33,7 +33,7 @@ for col in caracteristicas_categoricas:
     dataTesting[col + '_encoded'] = label_encoder.transform(dataTesting[col])
 
 procesamiento = ColumnTransformer(
-    transformaciones=[
+    transformers=[
         ('num', StandardScaler(), caracteristicas_numericas),
         ('cat', 'passthrough', [x + '_encoded' for x in caracteristicas_categoricas])
     ]
