@@ -14,10 +14,10 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score
 import joblib
 
-import os
-os.chdir('..')
+#import os
+#os.chdir('..')
 # Carga de datos de archivos .csv
-data = pd.read_csv('https://raw.githubusercontent.com/davidzarruk/MIAD_ML_NLP_2023/main/datasets/phishing.csv')
+data = pd.read_csv('https://raw.githubusercontent.com/felipemiad/MachineLearning/main/phishing.csv')
 data.head()
 
 # Creación de columnas binarias que indican si la URL contiene la palabra clave (keywords)
