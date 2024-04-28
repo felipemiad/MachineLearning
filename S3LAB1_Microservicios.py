@@ -52,7 +52,7 @@ cross_val_score(clf, X, y, cv=10)
 clf.fit(X, y)
 
 # Exportar modelo a archivo binario .pkl
-joblib.dump(clf, 'model_deployment/phishing_clf.pkl', compress=3)
+joblib.dump(clf, 'phishing_clf.pkl', compress=3)
 # Importar modelo y predicción
 from model_deployment.m09_model_deployment import predict_proba
 
