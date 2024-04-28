@@ -67,13 +67,28 @@ resource_fields = api.model('Resource', {
 @ns.route('/')
 class CarPrice(Resource):
     @api.doc(parser=parser)
-    @api.marshal_with(resource_fields)
     def post(self):
         args = parser.parse_args()
         csv_file = args['file']
         if csv_file:
             data = pd.read_csv(csv_file)
-            data_prepared = preprocessor.transform(data[numeric_features + [x + '_encoded' for x in categorical_features]])
+
+            # Asegúrate de que las columnas necesarias están presentes
+            required_columns = ['State', 'Make', 'Model']
+            missing_columns = [col for col in required_columns if col not in data.columns]
+            if missing_columns:
+                return {'message': f'Missing columns: {missing_columns}'}, 400
+
+            # Aplica LabelEncoder a las columnas categóricas
+            label_encoders = {col: LabelEncoder() for col in required_columns}
+            for col in required_columns:
+                data[col + '_encoded'] = label_encoders[col].fit_transform(data[col])
+            
+            # Prepara las características para el modelo
+            feature_columns = numeric_features + [col + '_encoded' for col in required_columns]
+            data_prepared = preprocessor.transform(data[feature_columns])
+
+            # Predicción
             predictions = model.predict(data_prepared)
             return {"result": predictions.tolist()}, 200
         else:
