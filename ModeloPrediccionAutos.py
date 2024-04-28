@@ -64,6 +64,38 @@ resource_fields = api.model('Resource', {
     'result': fields.String,
 })
 
+#@ns.route('/')
+#class CarPrice(Resource):
+#    @api.doc(parser=parser)
+#    def post(self):
+#        args = parser.parse_args()
+#        csv_file = args['file']
+#        if csv_file:
+#            data = pd.read_csv(csv_file)
+
+            # Asegúrate de que las columnas necesarias están presentes
+#            required_columns = ['State', 'Make', 'Model']
+#            missing_columns = [col for col in required_columns if col not in data.columns]
+#            if missing_columns:
+#                return {'message': f'Missing columns: {missing_columns}'}, 400
+
+            # Aplica LabelEncoder a las columnas categóricas
+#            label_encoders = {col: LabelEncoder() for col in required_columns}
+#            for col in required_columns:
+#                data[col + '_encoded'] = label_encoders[col].fit_transform(data[col])
+            
+            # Prepara las características para el modelo
+#            feature_columns = numeric_features + [col + '_encoded' for col in required_columns]
+#            data_prepared = preprocessor.transform(data[feature_columns])
+
+            # Predicción
+#            predictions = model.predict(data_prepared)
+#            return {"result": predictions.tolist()}, 200
+#        else:
+#            return {'message': 'File not provided'}, 400
+
+#if __name__ == '__main__':
+#    app.run(debug=True, use_reloader=False, host='0.0.0.0', port=5001)
 @ns.route('/')
 class CarPrice(Resource):
     @api.doc(parser=parser)
@@ -79,6 +111,10 @@ class CarPrice(Resource):
             if missing_columns:
                 return {'message': f'Missing columns: {missing_columns}'}, 400
 
+            # Verifica que la columna ID está presente
+            if 'ID' not in data.columns:
+                return {'message': 'Missing ID column'}, 400
+
             # Aplica LabelEncoder a las columnas categóricas
             label_encoders = {col: LabelEncoder() for col in required_columns}
             for col in required_columns:
@@ -90,9 +126,18 @@ class CarPrice(Resource):
 
             # Predicción
             predictions = model.predict(data_prepared)
-            return {"result": predictions.tolist()}, 200
+
+            # Crea un DataFrame para la salida
+            output_df = pd.DataFrame({
+                'ID': data['ID'],
+                'Prediction': predictions
+            })
+
+            # Convertir DataFrame a CSV
+            result_csv = output_df.to_csv(index=False)
+            return jsonify(result_csv)
+
         else:
             return {'message': 'File not provided'}, 400
-
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False, host='0.0.0.0', port=5001)
