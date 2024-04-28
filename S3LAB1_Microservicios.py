@@ -54,7 +54,7 @@ clf.fit(X, y)
 # Exportar modelo a archivo binario .pkl
 joblib.dump(clf, 'phishing_clf.pkl', compress=3)
 # Importar modelo y predicción
-from model_deployment.m09_model_deployment import predict_proba
+from m09_model_deployment import predict_proba
 
 # Predicción de probabilidad de que un link sea phishing
 predict_proba('http://www.vipturismolondres.com/com.br/?atendimento=Cliente&/LgSgkszm64/B8aNzHa8Aj.php')
