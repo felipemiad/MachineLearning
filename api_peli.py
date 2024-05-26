@@ -37,7 +37,11 @@ class GenrePrediction(Resource):
         args = parser.parse_args()
         archivo_csv = args['file']
         if archivo_csv:
-            data = pd.read_csv(archivo_csv)
+            # Leer el archivo CSV y asignar nombres a las columnas
+            data = pd.read_csv(archivo_csv, names=['ID', 'year', 'title', 'plot'], header=0)
+
+            # Verificar las columnas del DataFrame
+            print("Columnas del DataFrame:", data.columns.tolist())
 
             # Asegúrate de que la columna 'plot' está presente
             if 'plot' not in data.columns:
