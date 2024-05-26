@@ -18,13 +18,13 @@ vect = joblib.load('vectorizer.pkl')
 le = joblib.load('label_encoder.pkl')
 
 app = Flask(__name__)
-api = Api(app, version='1.0', title='Genre Classification API',
+api = Api(app, version='1.0', title='API Genero de Peliculas',
           description='API para clasificar géneros de películas')
 
-ns = api.namespace('predict', description='Predicción de Géneros')
+ns = api.namespace('predict', description='Predicción de Género de Peliculas')
 
 parser = api.parser()
-parser.add_argument('file', type=FileStorage, location='files', required=True, help='archivo CSV que contiene las tramas de las películas')
+parser.add_argument('file', type=FileStorage, location='files', required=True, help='archivo CSV que contiene caracteristicas de cada pelicula')
 
 resource_fields = api.model('Resource', {
     'result': fields.String,
